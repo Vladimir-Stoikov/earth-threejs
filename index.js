@@ -20,6 +20,7 @@ const scene = new THREE.Scene();
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.005;
+const detail = 24;
 
 // Sphere part -----------
 
@@ -55,7 +56,7 @@ controls.dampingFactor = 0.005;
 // Earth Part --------
 
 const loader = new THREE.TextureLoader();
-const geometry = new THREE.IcosahedronGeometry(1, 12);
+const geometry = new THREE.IcosahedronGeometry(1, detail);
 const material = new THREE.MeshStandardMaterial({
   map: loader.load('./assets/textures/earthmap1k.jpg'),
 });
@@ -65,6 +66,15 @@ earthGroup.rotation.z = (-23.4 * Math.PI) / 180;
 scene.add(earthGroup);
 const earthMesh = new THREE.Mesh(geometry, material);
 earthGroup.add(earthMesh);
+
+const lightsMat = new THREE.MeshBasicMaterial({
+  map: loader.load('./assets/textures/03_earthlights1k.jpg'),
+  blending: THREE.AdditiveBlending,
+});
+
+const lightsMesh = new THREE.Mesh(geometry, lightsMat);
+
+earthGroup.add(lightsMesh);
 
 const stars = getStarfield(2000);
 scene.add(stars);
@@ -79,6 +89,7 @@ scene.add(sunLight);
 function animate(t = 0) {
   requestAnimationFrame(animate);
   earthMesh.rotation.y += 0.001;
+  lightsMesh.rotation.y += 0.001;
   renderer.render(scene, camera);
   controls.update();
 }
