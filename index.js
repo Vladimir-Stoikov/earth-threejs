@@ -76,6 +76,18 @@ const lightsMesh = new THREE.Mesh(geometry, lightsMat);
 
 earthGroup.add(lightsMesh);
 
+const cloudsMat = new THREE.MeshStandardMaterial({
+  map: loader.load('./assets/textures/04_earthcloudmap.jpg'),
+  transparent: true,
+  opacity: 0.6,
+  blending: THREE.AdditiveBlending,
+  alphaMap: loader.load('./assets/textures/05_earthcloudmaptrans.jpg'),
+  alphaTest: 0.3,
+});
+const cloudsMesh = new THREE.Mesh(geometry, cloudsMat);
+cloudsMesh.scale.setScalar(1.004);
+earthGroup.add(cloudsMesh);
+
 const stars = getStarfield(2000);
 scene.add(stars);
 
@@ -90,6 +102,7 @@ function animate(t = 0) {
   requestAnimationFrame(animate);
   earthMesh.rotation.y += 0.001;
   lightsMesh.rotation.y += 0.001;
+  cloudsMesh.rotation.y += 0.001;
   renderer.render(scene, camera);
   controls.update();
 }
